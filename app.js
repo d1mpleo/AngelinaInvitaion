@@ -1,7 +1,7 @@
 (function(){
 var C=window.CONFIG,Q=C.questions.map(function(q){
   if(q.type==="days"){
-    var o=[];for(var i=1;i<=C.daysAhead;i++){var d=new Date();d.setDate(d.getDate()+i);o.push(d.toLocaleDateString("uk-UA",{weekday:"short",day:"numeric",month:"numeric"}))}
+    var o=[],excluded=C.excludedWeekdays||[];for(var i=1;i<=C.daysAhead;i++){var d=new Date();d.setDate(d.getDate()+i);if(excluded.indexOf(d.getDay())<0)o.push(d.toLocaleDateString("uk-UA",{weekday:"short",day:"numeric",month:"numeric"}))}
     q=Object.assign({},q,{multi:true,options:o.concat(q.extra||[])});
   }
   return q;
