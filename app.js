@@ -65,9 +65,15 @@ function fin(){
   card.querySelector("#bk").onclick=function(){step=Q.length-1;render()};
   var hn=card.querySelector("#hn");
   card.querySelector("#cp").onclick=function(){
-    function fb(){var t=document.createElement("textarea");t.value=txt;t.style.cssText="position:fixed;opacity:0";document.body.appendChild(t);t.select();var ok=false;try{ok=document.execCommand("copy")}catch(e){}t.remove();return ok}
-    function done(ok){hn.textContent=ok?F.copied:"Не вдалося скопіювати автоматично, виділи текст вище і скопіюй вручну.";if(ok&&C.contactUrl)window.open(C.contactUrl,"_blank")}
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){done(true)},function(){done(fb())})}else{done(fb())}
+    var shareUrl="https://t.me/share/url?text="+encodeURIComponent(txt);
+    if(navigator.share){
+      navigator.share({text:txt}).then(function(){hn.textContent="Перевір, що вибрала чат і надіслала відповіді."}).catch(function(e){
+        if(e&&e.name==="AbortError"){hn.textContent="Надсилання скасовано. Відповіді не надіслано.";return}
+        window.location.href=shareUrl;
+      });
+    }else{
+      window.location.href=shareUrl;
+    }
   };
 }
 render();
